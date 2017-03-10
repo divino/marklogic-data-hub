@@ -28,8 +28,6 @@ curl -s -c cookies.txt --data "email=${MLBUILD_USER}&password=${MLBUILD_PASSWORD
 echo
 echo "Getting Download Link"
 dl_link=$(curl -s -b cookies.txt --data "download=/download/binaries/8.0/${fname}" https://developer.marklogic.com/get-download-url | perl -pe 's/.*"path":"([^"]+).*/\1/')
-echo
-echo "Download link: ${dl_link}"
 url="https://developer.marklogic.com${dl_link}"
 
 echo "********* Downloading MarkLogic $ver"
