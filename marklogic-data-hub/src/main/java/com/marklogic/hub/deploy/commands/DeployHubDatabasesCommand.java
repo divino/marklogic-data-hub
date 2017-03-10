@@ -16,6 +16,7 @@
 package com.marklogic.hub.deploy.commands;
 
 import java.io.File;
+import java.text.Collator;
 import java.util.*;
 
 import com.marklogic.appdeployer.ConfigDir;
@@ -78,6 +79,25 @@ public class DeployHubDatabasesCommand extends AbstractUndoableCommand {
         Collections.sort(list, new DeployDatabaseCommandComparator(context, true));
     }
 
+    protected File[] listFilesInDirectory(File dir, ResourceFilenameFilter filter) {
+        File[] files = dir.listFiles(filter );
+        Collator collator = Collator.getInstance();
+
+        Arrays.sort(files, (o1, o2) -> {
+            if (o1.getName().equals("modules-database.json")) {
+                return 1;
+            }
+            else if (o2.getName().equals("modules-database.json")) {
+                return -1;
+            }
+
+
+            return  collator.compare(o1.getName(), o2.getName());
+        });
+
+        return files;
+    }
+
     protected List<DeployDatabaseCommand> buildDatabaseCommands(CommandContext context) {
         List<DeployDatabaseCommand> dbCommands = new ArrayList<>();
 
@@ -92,9 +112,8 @@ public class DeployHubDatabasesCommand extends AbstractUndoableCommand {
             ignore.add(DeployTriggersDatabaseCommand.DATABASE_FILENAME);
 
             ResourceFilenameFilter filter = new ResourceFilenameFilter(ignore);
-            setResourceFilenameFilter(filter);
 
-            for (File f : listFilesInDirectory(dir)) {
+            for (File f : listFilesInDirectory(dir, filter)) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Will process other database in file: " + f.getName());
                 }
