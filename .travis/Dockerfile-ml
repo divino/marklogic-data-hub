@@ -30,4 +30,4 @@ ADD ./ /marklogic-data-hub
 WORKDIR /marklogic-data-hub
 
 # Define default command (which avoids immediate shutdown)
-CMD /tmp/startml.sh && ./gradlew check
+CMD /tmp/startml.sh && ./gradlew -Dtest.single=DataHubInstallT test -d
