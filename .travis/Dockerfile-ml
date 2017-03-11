@@ -29,5 +29,7 @@ VOLUME /marklogic-data-hub
 ADD ./ /marklogic-data-hub
 WORKDIR /marklogic-data-hub
 
+RUN ./gradlew tasks
+
 # Define default command (which avoids immediate shutdown)
 CMD /tmp/startml.sh && ./gradlew -Dtest.single=DataHubInstallT test -d
