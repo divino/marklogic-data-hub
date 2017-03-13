@@ -32,4 +32,4 @@ WORKDIR /marklogic-data-hub
 RUN ./gradlew tasks
 
 # Define default command (which avoids immediate shutdown)
-CMD /tmp/startml.sh && ./gradlew test
+CMD /tmp/startml.sh && cd ml-data-hub-plugin && ../gradlew -Dtest.single=DisableDebuggingTaskT test -d
