@@ -7,12 +7,12 @@ RUN yum -y install glibc.i686 \
     bzip2 \
     unzip \
     xz-utils \
-    java-1.8.0-openjdk-devel
+    java-1.8.0-openjdk-devel 2>&1 > /dev/null
 
 # Install MarkLogic
 COPY ./MarkLogic.rpm /tmp/MarkLogic.rpm
 
-RUN yum -y install /tmp/MarkLogic.rpm
+RUN yum -y install /tmp/MarkLogic.rpm 2>&1 > /dev/null
 
 # Expose MarkLogic Server ports - add additional ones for your REST, etc
 # endpoints
@@ -29,7 +29,7 @@ VOLUME /marklogic-data-hub
 ADD ./ /marklogic-data-hub
 WORKDIR /marklogic-data-hub
 
-RUN ./gradlew tasks
+RUN ./gradlew tasks 2>&1 > /dev/null
 
 # Define default command (which avoids immediate shutdown)
-CMD /tmp/startml.sh && cd ml-data-hub-plugin && ../gradlew -Dtest.single=DisableDebuggingTaskT test -d
+CMD /tmp/startml.sh && ./gradlew test
